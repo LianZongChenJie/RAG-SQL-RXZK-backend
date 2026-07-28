@@ -1,0 +1,4 @@
+# application.yml
+spring:
+  profiles:
+    active: dev # 激活 application-dev.yml

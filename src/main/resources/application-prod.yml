@@ -1,0 +1,63 @@
+
+# 应用基本信息
+spring:
+  application:
+    name: demo-app
+  # 数据源配置
+  datasource:
+    dynamic:
+      primary: master  # 默认数据源
+      datasource:
+        master: # 主库（写）
+          url: jdbc:mysql://pc-2zeibm494f20fn44e.mysql.polardb.rds.aliyuncs.com:3306/sql_rag?serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&allowMultiQueries=true
+          username: sqlragtest
+          password: dE%y0Au5mp-G0YVUf6IXh#Kg_Mn
+          driver-class-name: com.mysql.cj.jdbc.Driver
+        slave: # 从库（读）
+          url: jdbc:mysql://pc-2zeibm494f20fn44e.mysql.polardb.rds.aliyuncs.com:3306/sql_rag?serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&allowMultiQueries=true
+          username: readwnsse
+          password: Read!@#$
+          driver-class-name: com.mysql.cj.jdbc.Driver
+  # 禁用 DevTools 热重启
+  devtools:
+    restart:
+      enabled: false
+#
+  # 禁用自动建表
+  sql:
+    init:
+      mode: never
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+
+# MyBatis配置
+mybatis:
+  mapper-locations: classpath*:mapper/**/*.xml
+  type-aliases-package: com.example.sqlRag.entity
+  configuration:
+    map-underscore-to-camel-case: true
+
+jwt:
+  secret: secretKeyLE69D8E26446QE5BCBA24378
+  expiration: 86400000  # 24小时
+  issuer: demo-app
+
+# SM4密钥
+Sm4:
+  key: a3f79c4e8b12d506e1f2a8c7b3094e2d
+
+# 千问AI配置 (阿里云私有云)
+qwen:
+  api:
+    key: sk-ws-H.RPEELDP.GBk3.MEUCIC7TzF9BUIx53nBvntodcjL2u0ze4OXDWAMi97g6NtF4AiEAg_cu2_DwcUBj3J8neG0DXp5e2aRGu5yQxf0OcxUcv_E
+    host: llm-yfsmtft5nvzlpqx9.cn-beijing.maas.aliyuncs.com
+
+# 服务器配置
+server:
+  port: 9091
+  servlet:
+    context-path: /
+
+# 日志配置（已迁移到 logback-spring.xml）
