@@ -125,6 +125,16 @@ public class QwRagServiceImpl implements QwRagService {
 
     @Override
     public void processStream(QwRagStreamRequest request, SseEmitter emitter) {
+        // 通过code值获取数据库中真是的问题内容
+        if (!StringUtils.isEmpty(request.getCode()) && !StringUtils.isEmpty(request.getCode())) {
+            RagMetric metric = ragMetricService.getRagMetric(request.getCode());
+            {
+                if (metric != null) {
+                    request.setMessage(metric.getProgramName());
+                }
+            }
+        }
+        // 拼接messageDesc到message字段上
         if (!StringUtils.isEmpty(request.getMessageDesc()) && !StringUtils.isEmpty(request.getMessageDesc())){
             request.setMessage(request.getMessage() + "-" + request.getMessageDesc());
         }
@@ -497,11 +507,11 @@ public class QwRagServiceImpl implements QwRagService {
 
         // 4.2 流式请求生成自然语言回答
         String[][] renderMessages = buildRenderMessages(message, resultJson);
-        String desc = metric.getDesc();
-        desc = cleanDesc(desc);
-        desc = "指标计算说明：" + desc;
+        String programDesc = metric.getProgramDesc();
+        programDesc = cleanDesc(programDesc);
+        programDesc = "指标计算说明：" + programDesc;
         String satisfactionFormula = buildSatisfactionFormula(resultJson);
-        qwenService.streamChatForSummery(renderMessages, emitter, "chart", chartResult,desc);
+        qwenService.streamChatForSummery(renderMessages, emitter, "chart", chartResult,programDesc);
 
         // ===================== 第五步：生成ElementUI Table结构 =====================
         if (elementUITableJson != null) {
@@ -538,7 +548,7 @@ public class QwRagServiceImpl implements QwRagService {
         RagMetric metric = ragMetricService.getRagMetric(code);
         if (metric == null){
             metric = new RagMetric();
-            metric.setDesc(QuestionTypeEnum.fromCode(strType).getDesc());
+            metric.setProgramDesc(QuestionTypeEnum.fromCode(strType).getDesc());
         }
         // ===================== 第一步：验证接受到的信息 =====================
         log.info("【第一步】验证请求参数");
@@ -649,13 +659,13 @@ public class QwRagServiceImpl implements QwRagService {
         // 4.1 生成图表配置
         log.info("【第四步-图表】生成ECharts图表配置");
         String chartResult = generateChartConfig(message, resultJson, chartType);
-        String desc = metric.getDesc();
-        desc = cleanDesc(desc);
-        desc = "指标计算说明：" + desc;
+        String programDesc = metric.getDesc();
+        programDesc = cleanDesc(programDesc);
+        programDesc = "指标计算说明：" + programDesc;
 
         // 4.2 流式请求生成自然语言回答
         String[][] renderMessages = buildRenderMessages(message, resultJson);
-        qwenService.streamChatForSummery(renderMessages, emitter, "chart", chartResult, desc);
+        qwenService.streamChatForSummery(renderMessages, emitter, "chart", chartResult, programDesc);
 
         // ===================== 第五步：生成ElementUI Table结构 =====================
         log.info("【第五步】生成ElementUI Table结构");

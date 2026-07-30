@@ -10,7 +10,9 @@ public class RagMetric {
     private String pcode;
     private String code;
     private String name;
+    private String programName;
     private String desc;
+    private String programDesc;
     private String node;
     private String dsl;
     private String sqlStr;
