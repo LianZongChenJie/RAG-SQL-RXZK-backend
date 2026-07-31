@@ -513,7 +513,6 @@ public class QwRagServiceImpl implements QwRagService {
         String lOrgId = request.getLOrgId();
         String[] strTitleList = request.getStrTitleList();
         String[] strOptionList = request.getStrOptionList();
-
         RagMetric metric = ragMetricService.getRagMetric(code);
         if (metric == null){
             metric = new RagMetric();
@@ -628,7 +627,7 @@ public class QwRagServiceImpl implements QwRagService {
         // 4.1 生成图表配置
         log.info("【第四步-图表】生成ECharts图表配置");
         String chartResult = generateChartConfig(message, resultJson, chartType);
-        String programDesc = metric.getDesc();
+        String programDesc = metric.getProgramDesc();
         programDesc = cleanDesc(programDesc);
         programDesc = "指标计算说明：" + programDesc;
 
