@@ -576,3 +576,34 @@ LEFT JOIN
 - 如果用户问题与表结构不相关或不明确，返回空字符串
 - 生成的 SQL 必须在 **MySQL 5.7.28** 语法下合法可执行
 - **禁止使用** MySQL 8.0+ 的语法特性，包括但不限于：窗口函数（`OVER()`、`ROW_NUMBER()`、`RANK()`、`DENSE_RANK()`、`LAG()`、`LEAD()` 等）、`WITH`（CTE 公用表表达式）、`LATERAL`、`JSON_TABLE` 等
+
+18. 注意事项遇到用户问题中含有这些下面表格where字段列 或者group by 字段列，一定要在要生成的sql语句中添加这些过滤条件或者聚合。
+| where 字段列 | group by 字段列 | 对应数据库表列名 | 对应数据库表列注释 |
+|--------------|----------------|------------------|---------------------|
+| 学历 | 学历 | strDegree | 学历编码 |
+| 性别 | 性别 | strGender | 性别 |
+| 学院 | 学院 | strDepartment | 学院 |
+| 专业 | 专业 | strSpeciality | 专业 |
+| 学生（专业）属性 | 学生（专业）属性 | strSpecialtyAttribute | 学生（专业）属性 |
+| 省内外生源 | 省内外生源 | nOriginInsideOrOutside | 省内外生源 1-省内生源，2-省外生源 |
+| 困难生 | 困难生 | strDifficult | 困难生类别 |
+| 生源省 | 生源省 | strOriginProvinceCode | 生源省编码 |
+
+19. 毕业去向落实率 注意事项
+-- 分子：该分组内已就业的人数
+-- 分子：该分组内已就业的人数
+(SELECT COUNT(*) 
+ FROM `表名` {tableName} 
+ WHERE t.`lDataSetId` = {lDataSetId}          -- ✅ 必须加数据集过滤
+   AND t.`分组字段` = d.`分组字段`          -- ✅ 关联分组字段
+   AND t.`strSystemGraduationCategory` IS NOT NULL 
+   AND t.`strSystemGraduationCategory` != '' 
+   AND t.`strSystemGraduationCategory` != '未就业'
+)
+
+-- 分母：该分组内的总人数
+(SELECT COUNT(*) 
+ FROM `表名` 
+ WHERE `lDataSetId` = `数据集ID`            -- ✅ 必须加数据集过滤
+   AND `分组字段` = d.`分组字段`            -- ✅ 关联分组字段
+)
