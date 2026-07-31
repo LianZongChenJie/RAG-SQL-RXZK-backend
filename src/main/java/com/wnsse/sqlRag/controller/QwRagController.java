@@ -70,12 +70,6 @@ public class QwRagController {
         return emitter;
     }
 
-//    @GetMapping("/getObjectSQL")
-//    public String getObjectSQl(QwRagStreamRequest request) {
-//        request.setDbType(SqlProsConstant.OBJECTIVE_DB_TYPE);
-//        return qwRagService.getObjectSQl(request);
-//    }
-
 
     @PostMapping("/getObjectSQLAndData")
     public String getObjectSQlAndData(@RequestBody QwRagStreamRequest request) {

@@ -27,12 +27,6 @@ public interface QwRagService {
      */
     void processStream(QwRagStreamRequest request, SseEmitter emitter);
 
-    /**
-     * 获取客观SQL
-     * @param request
-     * @return
-     */
-    String getObjectSQl(QwRagStreamRequest request);
 
     /**
      * 获取客观SQL和执行数据

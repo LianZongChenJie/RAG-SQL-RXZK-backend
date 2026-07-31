@@ -1,7 +1,5 @@
 package com.wnsse.sqlRag.controller;
 
-import com.wnsse.sqlRag.common.Result;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
